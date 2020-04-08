@@ -5,7 +5,7 @@
         "onCommand:jsonnet.preview"
     ],
     "categories": [
-        "Languages"
+        "Programming Languages"
     ],
     "contributes": {
         "commands": [
@@ -114,7 +114,9 @@
         "compile": "tsc -watch -p ./",
         "compile-once": "tsc -p ./",
         "compile-site": "browserify ./out/site/main.js > ksonnet.js",
-        "vscode:prepublish": "tsc -p ./"
+        "vscode:prepublish": "tsc -p ./",
+        "pretest": "npm run compile-once",
+		"test": "node ./out/test/main.js"
     },
     "version": "0.1.0"
 }

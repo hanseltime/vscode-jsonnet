@@ -7,6 +7,7 @@ import * as lexer from '../../../compiler/lexical-analysis/lexer';
 import * as parser from '../../../compiler/lexical-analysis/parser';
 import * as _static from '../../../compiler/static';
 import * as testWorkspace from '../test_workspace';
+import { ObjectFields } from '../../../compiler/lexical-analysis/ast';
 
 class LocatedSpec {
   constructor(
@@ -57,7 +58,7 @@ class ResolvedSpec<TResolved extends ast.Node | ast.IndexedObjectFields> extends
   }
 }
 
-const isResolvedSpec = <T1>(spec): spec is ResolvedSpec<T1> => {
+const isResolvedSpec = <T1 extends ast.Node | ast.IndexedObjectFields>(spec): spec is ResolvedSpec<T1> => {
   return spec instanceof ResolvedSpec;
 }
 
@@ -69,7 +70,7 @@ class FailedResolvedSpec<TResolveFailure extends ast.ResolveFailure> extends Loc
   }
 }
 
-const isFailedResolvedSpec = <T1>(spec): spec is FailedResolvedSpec<T1> => {
+const isFailedResolvedSpec = <T1 extends ast.ResolveFailure>(spec): spec is FailedResolvedSpec<T1> => {
   return spec instanceof FailedResolvedSpec;
 }
 
