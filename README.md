@@ -1,3 +1,9 @@
+# Important
+
+This repository is a forking of the archived Heptio jsonnet extension to make it compatible for the latest vscode.  It is not currently published, but feel free to download and use the vsce tool to package it for your IDE.  Bug/feature submissions will also be considered.
+
+[publishing/packaging]: https://code.visualstudio.com/api/working-with-extensions/publishing-extension
+
 # Jsonnet Support for Visual Studio Code
 
 A simple bare-bones extension providing simple syntax highlighting
