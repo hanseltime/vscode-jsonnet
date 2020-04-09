@@ -94,12 +94,12 @@
         "chai": "^3.5.0",
         "mocha": "^5.0.1",
         "typescript": "^2.3.2",
-        "@types/vscode": "^1.43.0",
+        "@types/vscode": "^1.29.0",
         "vscode-test": "^1.3.0"
     },
     "displayName": "Jsonnet",
     "engines": {
-        "vscode": "^1.43.0"
+        "vscode": "^1.29.0"
     },
     "homepage": "https://github.com/heptio/vscode-jsonnet/blob/master/README.md",
     "license": "SEE LICENSE IN 'LICENSE' file",
