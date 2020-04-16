@@ -10,6 +10,7 @@ import * as yaml from "js-yaml";
 import * as im from 'immutable';
 
 import * as lexical from '../compiler/lexical-analysis/lexical';
+import { VersionedTextDocumentIdentifier } from 'vscode-languageclient';
 
 
 // activate registers the Jsonnet language server with vscode, and
@@ -57,7 +58,7 @@ namespace register {
   ): void => {
     // Create Jsonnet provider, register it to provide for documents
     // with `PREVIEW_SCHEME` URI scheme.
-    const docProvider = new jsonnet.DocumentProvider();
+  const docProvider = new jsonnet.DocumentProvider();
     const registration = vs.workspace.registerTextDocumentContentProvider(
       jsonnet.PREVIEW_SCHEME, docProvider);
 
@@ -229,6 +230,20 @@ namespace html {
   }
 }
 
+namespace formatter {
+
+  export const prettyPrint = (
+    json: string, outputFormat: "json" | "yaml"
+  ): string => {
+    if (outputFormat == "yaml") {
+      return yaml.safeDump(JSON.parse(json));
+    } else {
+      return JSON.stringify(JSON.parse(json), null, 4);
+    }
+  }
+
+}
+
 namespace jsonnet {
   export let executable = "jsonnet";
   export const PREVIEW_SCHEME = "jsonnet-preview";
@@ -318,10 +333,10 @@ namespace jsonnet {
             ? this.previewCache.get(sourceUri.toString())
             : this.cachePreview(sourceDoc);
           if (isRuntimeFailure(result)) {
-            return html.body(html.errorMessage(result.error));
+            return result.error;
           }
           const outputFormat = workspace.outputFormat();
-          return html.body(html.prettyPrintObject(result, outputFormat));
+          return formatter.prettyPrint(result, outputFormat);
         });
     }
 
@@ -528,26 +543,22 @@ namespace display {
 
     const previewUri = jsonnet.canonicalPreviewUri(editor.document.uri);
 
-    return vs.commands.executeCommand(
-      'vscode.previewHtml',
-      previewUri,
-      getViewColumn(sideBySide),
-      `Jsonnet preview '${path.basename(editor.document.fileName)}'`
-    ).then((success) => { }, (reason) => {
-      alert.couldNotRenderJsonnet(reason);
-    });
+    // Activate Document Provider and display
+    const doc = vs.workspace.openTextDocument(previewUri).then( (doc) => {
+        vs.window.showTextDocument(doc, getViewColumn(sideBySide), true);
+    } );
   }
 
-  export const getViewColumn = (
+  export const getViewColumn = function(
     sideBySide: boolean
-  ): vs.ViewColumn | undefined => {
+  ): vs.ViewColumn {
     const active = vs.window.activeTextEditor;
     if (!active) {
       return vs.ViewColumn.One;
     }
 
     if (!sideBySide) {
-      return active.viewColumn;
+      return vs.ViewColumn.Active;
     }
 
     switch (active.viewColumn) {
@@ -557,7 +568,7 @@ namespace display {
         return vs.ViewColumn.Three;
     }
 
-    return active.viewColumn;
+    return vs.ViewColumn.Active;
   }
 }
 
