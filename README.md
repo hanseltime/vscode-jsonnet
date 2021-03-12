@@ -2,6 +2,13 @@
 
 This repository is a forking of the archived Heptio jsonnet extension to make it compatible for the latest vscode.  It is not currently published, but feel free to download and use the vsce tool to package it for your IDE.  Bug/feature submissions will also be considered.
 
+```
+npm i -D typescript@3
+npm i vsce -g
+vsce package
+code --install-extension jsonnet-0.1.0.vsix
+```
+
 [publishing/packaging]: https://code.visualstudio.com/api/working-with-extensions/publishing-extension
 
 # Jsonnet Support for Visual Studio Code
